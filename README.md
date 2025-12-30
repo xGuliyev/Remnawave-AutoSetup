@@ -78,7 +78,7 @@
 Run the following command in your terminal to install Remnawave automatically:
 
 ```sh
-wget -O start.sh https://raw.githubusercontent.com/AsanFillter/Remnawave-AutoSetup/main/start.sh && chmod +x start.sh && ./start.sh
+wget -O start.sh https://raw.githubusercontent.com/xGuliyev/Remnawave-AutoSetup/main/start.sh && chmod +x start.sh && ./start.sh
 ```
 
 <details>
