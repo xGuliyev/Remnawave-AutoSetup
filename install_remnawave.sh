@@ -246,7 +246,7 @@ services:
             - POSTGRES_DB=${POSTGRES_DB}
             - TZ=UTC
         ports:
-            - '127.0.0.1:6767:5432'
+            - '127.0.0.1:5432:5432'
         volumes:
             - remnawave-db-data:/var/lib/postgresql/data
         networks:
@@ -355,7 +355,7 @@ EOF
         return 1
     fi
     
-    fuser -k 8443/tcp 2>/dev/null || true
+    fuser -k 8880/tcp 2>/dev/null || true
     
     if ! command -v acme.sh &>/dev/null; then
         echo -e "${BOLD_RED}Error: acme.sh is still not available. Aborting certificate issuance.${NC}"
@@ -364,7 +364,7 @@ EOF
         return 1
     fi
     
-    acme.sh --issue --standalone -d "$CERT_DOMAIN" --key-file ~/remnawave/nginx/privkey.key --fullchain-file ~/remnawave/nginx/fullchain.pem --alpn --tlsport 8443
+    acme.sh --issue --standalone -d "$CERT_DOMAIN" --key-file ~/remnawave/nginx/privkey.key --fullchain-file ~/remnawave/nginx/fullchain.pem --alpn --tlsport 8880
     
     curl https://ssl-config.mozilla.org/ffdhe2048.txt > ~/remnawave/nginx/dhparam.pem
     
@@ -381,8 +381,8 @@ map \$http_upgrade \$connection_upgrade {
 server {
     server_name $CERT_DOMAIN;
 
-    listen 443 ssl reuseport;
-    listen [::]:443 ssl reuseport;
+    listen 8080 ssl reuseport;
+    listen [::]:8080 ssl reuseport;
     http2 on;
 
     location / {
@@ -450,8 +450,8 @@ server {
 }
 
 server {
-    listen 443 ssl default_server;
-    listen [::]:443 ssl default_server;
+    listen 8080 ssl default_server;
+    listen [::]:8080 ssl default_server;
     server_name _;
 
     ssl_reject_handshake on;
@@ -522,7 +522,7 @@ services:
             - POSTGRES_DB=${POSTGRES_DB}
             - TZ=UTC
         ports:
-            - '127.0.0.1:6767:5432'
+            - '127.0.0.1:5432:5432'
         volumes:
             - remnawave-db-data:/var/lib/postgresql/data
         networks:
